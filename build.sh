@@ -1,0 +1,9 @@
+cd evaluation_metric
+sh tf_approxmatch_compile.sh
+sh tf_nndistance_compile.sh
+cd ../farthest_sampling
+sh tf_sampling_compile.sh
+cd ..
+mkdir output
+mkdir output/models_ae
+mkdir diary
