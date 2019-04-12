@@ -1,10 +1,13 @@
 import numpy as np
-import utils
-import os
+import os, sys
 import tensorflow as tf
 import heapq
 import time
 import string
+
+this_dir = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(os.path.join(this_dir, '..', 'utils'))
+from io_utils import restoreModelFromIt, restoreModel, saveModel
 
 class SaverHelper():
 

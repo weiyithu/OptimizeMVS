@@ -1,20 +1,10 @@
-import cv2
-import time
+''' Single-image encoder model. 
+'''
 import numpy as np
-import cPickle as pickle
 import tensorflow as tf
 import tflearn
-import sys
-
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "6"
-
-BATCH_SIZE=1
-HEIGHT=192
-WIDTH=256
 
 def encoder(opt, image, r_):
-
         r = tf.reshape(r_, shape=[-1, opt.rand_dim])
         r = tflearn.layers.core.fully_connected(r, 256, activation='relu', weight_decay=1e-3, regularizer='L2')
         r = tflearn.layers.core.fully_connected(r, 768*3, activation='relu', weight_decay=1e-3, regularizer='L2') # [B*5, 768*3]
@@ -78,5 +68,5 @@ def encoder(opt, image, r_):
 	x=tf.reshape(x,(-1,32*24*2,3))
 	x=tf.concat([x_additional,x],axis=1)
 	x=tf.reshape(x,(-1,2048,3))
-
         return x
+

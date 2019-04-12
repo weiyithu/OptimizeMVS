@@ -1,144 +1,12 @@
-import numpy as np
-import string
-import os
 import tensorflow as tf
-import sys
-from plyfile import PlyData, PlyElement
-import imageio
-import termcolor
-import scipy.misc
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(BASE_DIR, 'evaluation_metric'))
-sys.path.append(os.path.join(BASE_DIR, 'farthest_sampling'))
+import numpy as np
+import os, sys
+this_dir = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(this_dir)
+from eval_functions import evaluation
+sys.path.append(os.path.join(this_dir, '..', 'external_ops', 'evaluation_metric'))
 from tf_approxmatch import *
 from tf_nndistance import *
-from tf_sampling import *
-import scipy.misc 
-import png
-
-def mkdir(path):
-    if not os.path.exists(path): os.makedirs(path)
-
-# ------ read data ------
-def read_from_list(fpath):
-    res = []
-    with open(fpath) as file:
-        for line in file:
-            res.append(line.strip())
-    return res
-
-def read_pc_from_pcd(fpath):
-    pc = []
-    with open(fpath) as pcd:
-        for line in pcd.readlines()[11:len(pcd.readlines())-1]:
-            strs = line.split(' ')
-            x = float(strs[0])
-            y = float(strs[1])
-            z = float(strs[2].strip())
-            pc.append(np.array([x, y, z]))
-    return np.array(pc)
-
-def read_pc_from_ply(fpath):
-    plydata = PlyData.read(fpath)
-    x = np.asarray(plydata.elements[0].data['x'])
-    y = np.asarray(plydata.elements[0].data['y'])
-    z = np.asarray(plydata.elements[0].data['z'])
-    return np.stack([x, y, z], axis=1)
-
-def imread(fname):
-    im = imageio.imread(fname)/255.0
-    if len(np.shape(im)) == 3:
-        im = im[:, :, :3]
-    return im
-def imread_depth(fname):
-    im = scipy.misc.imread(fname)
-    return im
-
-# ------ write data ------
-def write_ply(points, filename, text=True):
-    points = [(points[i,0], points[i,1], points[i,2]) for i in range(points.shape[0])]
-    vertex = np.array(points, dtype=[('x', 'f4'), ('y', 'f4'),('z', 'f4')])
-    el = PlyElement.describe(vertex, 'vertex', comments=['vertices'])
-    PlyData([el], text=text).write(filename)
-
-def write_pc_to_file(data, fpath):
-    with open(fpath, 'w') as file:
-        for i in range(np.shape(data)[0]):
-            file.write('{0} {1} {2}\n'.format(data[i][0], data[i][1], data[i][2]))
-def imsave(fname, array):
-    scipy.misc.toimage(array, cmin=0.0, cmax=1.0).save(fname)
-
-# ------ convert to colored strings (better viewed in color)------
-def toRed(content): return termcolor.colored(content, "red", attrs=["bold"])
-def toGreen(content): return termcolor.colored(content, "green", attrs=["bold"])
-def toBlue(content): return termcolor.colored(content, "blue", attrs=["bold"])
-def toCyan(content): return termcolor.colored(content, "cyan", attrs=["bold"])
-def toYellow(content): return termcolor.colored(content, "yellow", attrs=["bold"])
-def toMagenta(content): return termcolor.colored(content, "magenta", attrs=["bold"])
-
-
-# ------ restore and save model ------
-def restoreModelFromIt(path, opt, sess, saver, it):
-    saver.restore(sess, './' + path + "/models_{0}/{1}_it{2}.ckpt".format(opt.group, opt.model, it))
-
-def restoreModel(path, opt, sess, saver):
-    saver.restore(sess, './' + path + "/{0}.ckpt".format(opt.load))
-
-def saveModel(path, opt, sess, saver, it):
-    saver.save(sess, path + "/models_{0}/{1}_it{2}.ckpt".format(opt.group, opt.model, it))
-
-
-# ------ view dairy function ------
-def parse_report(diary_path, key_):
-    timeline = []
-    nameline = []
-    idx = 0
-    with open(diary_path) as file:
-        flag = 2
-        lines = file.readlines()
-        for line in lines:
-            if flag == 2:
-                if line.strip('\n') == 'loss_diary':
-                    flag = 2
-                else: flag = 1
-                continue
-            if flag == 1:
-                line = line.strip('\n')
-                info = string.split(line, ',')
-                key_list = []
-                for str_ in info:
-                    key_list.append(string.split(str_, ':')[0])
-                for i in range(len(key_list)):
-                    key = key_list[i]
-                    if key == key_:
-                        idx = i
-                flag = 0
-
-            info = string.split(line, ',')
-            timeline.append(float(string.split(info[idx], ':')[1]))
-            nameline.append(int((line.split('_it')[1]).split('.ckpt')[0])) 
-    return timeline,nameline
-
-def report_best(diary_path, mode):
-    if mode == 'EMD':
-        emd_timeline, _ = parse_report(diary_path, 'EMD_test')
-        cd_timeline, nameline = parse_report(diary_path, 'CD_test')
-        if not len(emd_timeline):
-            return -1, -1, -1
-        else: 
-            emd = min(emd_timeline)
-            cd = min(cd_timeline)
-            return emd, cd, nameline[np.argmin(cd_timeline)]
-    else:
-        cd_fps_timeline, nameline = parse_report(diary_path, 'CD_fps_test')
-        cd_timeline, _ = parse_report(diary_path, 'CD_test')
-        if not len(cd_fps_timeline):
-            return -1, -1, -1
-        else: 
-            cd_fps = min(cd_fps_timeline)
-            cd = min(cd_timeline)
-            return cd_fps, cd, nameline[np.argmin(cd_fps_timeline)]
-
 
 # ------ function ------
 def int16Todepth(dMap, minVal=0, maxVal=10):
@@ -166,7 +34,7 @@ def inverse_projection(Depth, K, Extrinsic, H=224, W=224):
     if downscale_H >1 or downscale_W > 1:
         Depth = -(tf.nn.max_pool(-tf.expand_dims(Depth, axis=3), ksize=[1,int(downscale_H),int(downscale_W),1],strides=[1,int(downscale_H),int(downscale_W),1],padding="VALID"))
         Depth = tf.squeeze(Depth)
-    K = K*np.array([[1.0/downscale_H], [1.0/downscale_W], [1]], dtype=np.float32)
+    K = K * np.array([[1.0/downscale_H], [1.0/downscale_W], [1]], dtype=np.float32)
     batchSize = tf.shape(Depth)[0]
     Depth = int16Todepth(Depth) #[B,H,W]
     mask = (Depth < 10)
@@ -235,8 +103,9 @@ def projection(XYZ, K, Extrinsic, H=224, W=224, reuse=False): #[B,N,3],[B,3,3],[
         XYZtemp = XYZtemp[:,:3,:]
         XYZnew = tf.matmul(K, XYZtemp)# [B,3,N] = [B,3,3]*[B,3,N]
         XYZnew = tf.transpose(XYZnew, [0,2,1]) # [B,N,3]
-        X = tf.reshape(tf.to_int32(tf.round(tf.div(XYZnew[:,:,0], XYZnew[:,:,2]))), [-1]) #[B*N,]
-        Y = tf.reshape(tf.to_int32(tf.round(tf.div(XYZnew[:,:,1], XYZnew[:,:,2]))), [-1]) #[B*N,]
+        eps = 1e-12
+        X = tf.reshape(tf.to_int32(tf.round(tf.div(XYZnew[:,:,0], XYZnew[:,:,2] + eps))), [-1]) #[B*N,]
+        Y = tf.reshape(tf.to_int32(tf.round(tf.div(XYZnew[:,:,1], XYZnew[:,:,2] + eps))), [-1]) #[B*N,]
         YX = tf.stack([Y,X], axis=1) #[B*N,2]
         Batch = tf.range(0, batchSize, 1)
         Batch = tf.tile(tf.expand_dims(Batch, axis=1),[1,N]) 
@@ -361,52 +230,6 @@ def get_loss_diversity(r, pc, rand_num, alpha=0.2, is_emd=True):
     loss = loss/(rand_num*(rand_num-1)/2)
     return loss
 
-def FGSM(inputs, y, eps=0.0, clip_min=0.,clip_max=1.):
-    x = inputs
-    dy_dx = tf.gradients(y, x)
-    x = x - eps*tf.to_float(dy_dx)
-    return x, y 
-
-
-
-def evaluation(gt, pred, is_emd=True):
-    """
-    Use EMD or CD to evaluate the difference between two 3D clouds
-    Params:
-    -- gt       : Groundtruth cloud. Tensor [batch_size, point_number1, 3]
-    -- pred     : Prediction Cloud. Tensor [batch_size, point_number2, 3]
-    -- is_emd   : Whether to use EMD.
-
-    Returns:
-    -- dist     : results. Tensor [batch_size, ]
-    """
-
-    if is_emd:
-        dist = approx_match(gt, pred)
-        return tf.reduce_mean(dist)
-    else:
-        dist1, dist2 = nn_distance(gt, pred) #dist1: gt->pred, dist2: pred->gt
-        dist = dist1 + dist2
-        return tf.reduce_mean(100*dist), tf.reduce_mean(100*dist1), tf.reduce_mean(100*dist2)
-
-def farthest_point_sampling(n, input_pc):
-   '''
-   Using Farthest Point Sampling Algorithm.
-   Give input point cloud and downsample to point cloud which has n points.
-   Params:
-   -- n         : Expected output cloud's point number, eg: 1024
-   -- input_pc  : Input point cloud. Tensor [batch_size, point_number, 3]
-   
-   Returns:
-   -- output_pc : Output cloud which contains n points Tensor [batch_size, n, 3]
-   '''  
-   output_idx = farthest_point_sample(n, input_pc)
-   output_pc = gather_point(input_pc, output_idx)
-   return output_pc
-
-
-
-
 def consis_loss(Cloud, Extrinsic, num_camera, is_emd=False, batch_once=100):  #[B,C,N,3],[B,C,4,4]
     '''
     Consistence Loss
@@ -476,5 +299,10 @@ def consis_loss(Cloud, Extrinsic, num_camera, is_emd=False, batch_once=100):  #[
     i, loss = tf.while_loop(cond, body, [i, loss], shape_invariants = [i.get_shape(), tf.TensorShape([None])])
     return loss[1:]
 
+def FGSM(inputs, y, eps=0.0, clip_min=0.,clip_max=1.):
+    x = inputs
+    dy_dx = tf.gradients(y, x)
+    x = x - eps*tf.to_float(dy_dx)
+    return x, y 
 
 

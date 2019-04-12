@@ -12,7 +12,10 @@ from tflearn.layers.conv import conv_1d, avg_pool_1d
 from tflearn.layers.normalization import batch_normalization
 from tflearn.layers.core import fully_connected, dropout
 
-from tf_util import expand_scope_by_name, replicate_parameter_for_all_layers
+import os, sys
+this_dir = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(this_dir)
+from backbone_utils import expand_scope_by_name, replicate_parameter_for_all_layers
 
 def encoder(in_signal, n_filters=[64, 128, 256, 256, 128], filter_sizes=[1], strides=[1],
                                         b_norm=True, non_linearity=tf.nn.relu, regularizer=None, weight_decay=0.001,

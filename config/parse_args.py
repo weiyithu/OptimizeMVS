@@ -1,25 +1,18 @@
-import numpy as np
+
 import argparse
-import os
-import time
-import string
 
 DATASET_PATH = '/data2/weiy/data-3d/shapenet/'
-CAT_LIST_1 = ['03001627']
-CAT_LIST_13 = ['02691156', '02828884', '02933112', '02958343', '03001627', '03211117', '03636649', '03691459', '04090263', '04256520', '04379243', '04401088', '04530566']
 
-
-
-def set():
+def parse_args():
     parser = argparse.ArgumentParser()
    
     # ------ basic setting ------
+    parser.add_argument("--gpu", type=int, required=True, help="gpu_id")
     parser.add_argument('--task', default="bingo", help='task name, to be appeared at the title of the diary.')
     parser.add_argument('--group', default="0", help='group name')
     parser.add_argument('--model', default="bingo", help='model name')
     parser.add_argument("--load", default=None,	help="load trained model to fine-tune/evaluate")
     parser.add_argument("--cat", type=int, default=1, help="number of categories (1 or 13)")
-    parser.add_argument("--gpu", type=int, default=-1, help="gpu_id")
     parser.add_argument("--data_use_mask", type=bool, default=False, help="whether use mask for data processing")
     parser.add_argument("--inSize", default="224x224", help="resolution of encoder input")
     parser.add_argument("--depthSize", default="224x224", help="resolution of depth images")
@@ -61,33 +54,6 @@ def set():
     parser.add_argument("--batchSize_test", type=int, default=2,  help="batch size for evaluation")
     parser.add_argument("--chunkSize_test", type=int, default=100,  help="data chunk size to load for evaluation")
 
-    opt = parser.parse_args()
-    # below automatically set
-    opt.in_H, opt.in_W = [int(x) for x in opt.inSize.split("x")]
-    opt.depth_H, opt.depth_W = [int(x) for x in opt.depthSize.split("x")]
-
-    opt.datalist_path = os.path.join(opt.dataset_path, opt.datalist_path)
-    opt.pcgt_path = os.path.join(opt.dataset_path, opt.pcgt_path)
-    opt.rendering_path = os.path.join(opt.dataset_path, opt.rendering_path)
-    
-    if opt.cat == 1:
-        opt.cat_list = CAT_LIST_1
-    elif opt.cat == 13:
-        opt.cat_list = CAT_LIST_13
-    else:
-        raise ('Error!')
-
-
-
-    if opt.gpu != -1:
-        opt.gpu_id = str(opt.gpu)
-
-
-
-    # below constant
-    opt.K = np.array([[420., 0., 112.],
-                      [0., 420., 112.],
-                      [0., 0., 1.]])
-
-    return opt
-
+    args = parser.parse_args()
+    return args
+ 
