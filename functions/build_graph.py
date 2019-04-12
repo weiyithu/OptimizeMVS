@@ -104,6 +104,7 @@ def build_train_graph(args):
         optim_s2 = tf.train.AdamOptimizer(learning_rate=lr_PH).minimize(loss_s2, var_list=g_vars)
         optim_d = tf.train.AdamOptimizer(learning_rate=lr_PH).minimize(loss_d, var_list=d_vars)
 
+        # train output
         ret = {}
         ret['PH'] = PH
         ret['e_vars'] = e_vars
@@ -140,6 +141,7 @@ def build_train_graph(args):
         ret['r'] = r
         ret['image_in'] = image_in
         return ret
+
 
 def build_test_graph(args):
     print(toMagenta("building graph..."))
@@ -192,7 +194,30 @@ def build_test_graph(args):
         ## ------ optimizer ------
         lr_PH = tf.placeholder(tf.float32, shape=[])
 
+        # test output
+        ret = {}
+        ret['PH'] = PH
 
+        ret['loss_front_s1'] = loss_front_s1
+        ret['cd_s1'] = cd_s1
+        ret['emd_s1'] = emd_s1
+        ret['g_loss'] = g_loss
+        ret['d1_s1'] = d1_s1
+        ret['d2_s1'] = d2_s1
 
+        ret['loss_front_s2_evaluate'] = loss_front_s2_evaluate
+        ret['cd_s2_evaluate'] = cd_s2_evaluate
+        ret['cd_fps_s2_evaluate'] = cd_fps_s2_evaluate
+        ret['d1_fps_s2_evaluate'] = d1_fps_s2_evaluate
+        ret['d2_fps_s2_evaluate'] = d2_fps_s2_evaluate
+
+        ret['r_fgsm'] = r_fgsm
+        ret['loss_fgsm'] = loss_fgsm
+        ret['consis_loss_all_cd'] = consis_loss_all_cd
+
+        ret['lr_PH'] = lr_PH
+        ret['r'] = r
+        ret['image_in'] = image_in
+        return ret
 
 
