@@ -1,9 +1,9 @@
 ## OptimizeMVS
 
-Created by [Wei Yi](https://github.com/weiyithu), [Shaohui Liu](http://b1ueber2y.me/), [Wang Zhao](https://github.com/thuzhaowang), [Jiwen Lu](http://ivg.au.tsinghua.edu.cn/Jiwen_Lu/), [Jie Zhou](https://www.tsinghua.edu.cn/publish/auen/1713/2011/20110506105532098625469/20110506105532098625469_.html) from Tsinghua University.
+Created by [Yi Wei](https://github.com/weiyithu), [Shaohui Liu](http://b1ueber2y.me/) and [Wang Zhao](https://github.com/thuzhaowang) from Tsinghua University.
 
 ### Introduction
-This repository is for the paper [Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction](https://arxiv.org/abs/1612.01105), which is going to appear in CVPR 2019. 
+This repository contains source code for [Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction](https://arxiv.org/abs/1612.01105) in tensorflow. 
 
 ![prediction example](https://github.com/weiyithu/OptimizeMVS/blob/master/doc/teaser.png)
 
@@ -17,7 +17,7 @@ git clone https://github.com/weiyithu/OptimizeMVS.git
 
 #### 2. Install packages
 
-It's recommended to use Python virtual environment.
+Python virtual environment is recommended.
 ```
 cd OptimizeMVS
 virtualenv env
@@ -30,15 +30,15 @@ pip install -r requirements.txt
 
 
 ### Citation
-If you find our work useful in your research, please consider citing:
+If you find this work useful in your research, please consider citing:
 
-    @inproceedings{zhao2017pspnet,
-      author = {Hengshuang Zhao and
-                Jianping Shi and
-                Xiaojuan Qi and
-                Xiaogang Wang and
-                Jiaya Jia},
-      title = {Pyramid Scene Parsing Network},
+    @inproceedings{wei2019conditional,
+      author = {Yi Wei and
+                Shaohui Liu and
+                Wang Zhao and
+                Jiwen Lu and
+                Jie Zhou},
+      title = {Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction},
       booktitle = {Proceedings of IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-      year = {2017}
+      year = {2019}
     }
