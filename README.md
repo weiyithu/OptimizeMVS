@@ -5,15 +5,17 @@ Created by [Wei Yi](https://github.com/weiyithu), [Shaohui Liu](http://b1ueber2y
 ### Introduction
 This repository is for the paper [Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction](https://arxiv.org/abs/1612.01105), which is going to appear in CVPR 2019. 
 
+![prediction example](https://github.com/weiyithu/OptimizeMVS/doc/teaser.png)
+
 ### Installation
 The code has been tested with Python 2.7, tensorflow 1.3.0 on Ubuntu 16.04.
 
-##### 1. Clone code
+#### 1. Clone code
 ```bash
 git clone https://github.com/weiyithu/OptimizeMVS.git
 ```
 
-##### 2. Install packages
+#### 2. Install packages
 
 It's recommended to use Python virtual environment.
 ```bash
