@@ -33,12 +33,9 @@ pip install -r requirements.txt
 If you find this work useful in your research, please consider citing:
 
     @inproceedings{wei2019conditional,
-      author = {Yi Wei and
-                Shaohui Liu and
-                Wang Zhao and
-                Jiwen Lu and
-                Jie Zhou},
+      author = {Wei, Yi and Liu, Shaohui and Zhao, Wang and Lu, Jiwen and Zhou, Jie},
       title = {Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction},
       booktitle = {Proceedings of IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
       year = {2019}
     }
+The first three authors share equal contributions.
