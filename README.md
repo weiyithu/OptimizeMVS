@@ -18,7 +18,7 @@ git clone https://github.com/weiyithu/OptimizeMVS.git
 #### 2. Install packages
 
 It's recommended to use Python virtual environment.
-```bash
+```
 cd OptimizeMVS
 virtualenv env
 source ./env/bin/activate
