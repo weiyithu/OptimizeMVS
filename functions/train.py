@@ -109,7 +109,7 @@ with tf.Session(config=tfConfig) as sess:
                                 toRed("{0:.3f}".format(d_loss_))))
                 ## ------ evaluation ------
                 if (i+1) % args.test_iter == 0:
-                    loss_test_all = perform_test(opt=args, sess=sess, PH=tlist['PH'], runList=runList_test, test_loader=test_loader, stage=stage, appendix=appendix)
+                    loss_test_all = perform_test(args=args, sess=sess, PH=tlist['PH'], runList=runList_test, test_loader=test_loader, stage=stage, appendix=appendix)
                     [loss_front_test, test1, test2, d1, d2] = loss_test_all
                     saverhelper.saveModel(args.savedir, args, sess, i+1, [train2, train1, test2, test1, d1, d2])
                     print(toGreen("model saved: {0}/{1}_it{2}".format(args.group, args.model, i+1)))

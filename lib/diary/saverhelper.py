@@ -7,7 +7,7 @@ import string
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(this_dir, '..', 'utils'))
-from io_utils import restoreModelFromIt, restoreModel, saveModel
+import io_utils 
 
 class SaverHelper():
 
@@ -28,10 +28,10 @@ class SaverHelper():
             file.write(opt.task + '\n')
 
     def restoreModelFromIt(self, path, opt, sess, it):
-        utils.restoreModelFromIt(path, opt, sess, self.saver, it)
+        io_utils.restoreModelFromIt(path, opt, sess, self.saver, it)
 
     def restoreModel(self, path, opt, sess):
-        utils.restoreModel(path, opt, sess, self.saver)
+        io_utils.restoreModel(path, opt, sess, self.saver)
 
     def restoreModelFromBest(self, sess):
         best_model = self.report_best_model()
@@ -40,7 +40,7 @@ class SaverHelper():
 
     # ------ preserve best max_num models ------
     def saveModel(self, path, opt, sess, it, info):
-        utils.saveModel(path, opt, sess, self.saver, it)
+        io_utils.saveModel(path, opt, sess, self.saver, it)
         savedir = './' + path + "/models_{0}/{1}_it{2}.ckpt".format(opt.group, opt.model, it)
         
         if self.stage == 2:

@@ -54,7 +54,7 @@ with tf.Session(config=tfConfig) as sess:
         print(toMagenta("loading pretrained ({0}) to evaluate...".format(args.load)))
         args.load = None
 
-    loss_test_all = perform_test(opt=args, sess=sess, PH=tlist['PH'], runList=runList_test, test_loader=test_loader, stage=stage, appendix=appendix)
+    loss_test_all = perform_test(args=args, sess=sess, PH=tlist['PH'], runList=runList_test, test_loader=test_loader, stage=stage, appendix=appendix)
     [loss_front_test, test1, test2, d1, d2] = loss_test_all
     print(toYellow("======================================================="))
     print("test loss_front: {0}".format(toRed("{0:.3f}".format(loss_front_test))))
