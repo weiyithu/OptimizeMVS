@@ -8,11 +8,11 @@ def parse_args():
    
     # ------ basic setting ------
     parser.add_argument("--gpu", type=int, required=True, help="gpu_id")
-    parser.add_argument('--task', default="bingo", help='task name, to be appeared at the title of the diary.')
-    parser.add_argument('--group', default="0", help='group name')
-    parser.add_argument('--model', default="bingo", help='model name')
-    parser.add_argument("--load", default=None,	help="load trained model to fine-tune/evaluate")
+    parser.add_argument('--task', type=str, required=True, help='task name, to be appeared at the title of the diary.')
+    parser.add_argument('--model', type=str, required=True, help='model name')
     parser.add_argument("--cat", type=int, default=1, help="number of categories (1 or 13)")
+    parser.add_argument('--group', type=str, default="main", help='group name')
+    parser.add_argument("--load", default=None,	help="load trained model to fine-tune/evaluate")
     parser.add_argument("--data_use_mask", type=bool, default=False, help="whether use mask for data processing")
     parser.add_argument("--inSize", default="224x224", help="resolution of encoder input")
     parser.add_argument("--depthSize", default="224x224", help="resolution of depth images")
