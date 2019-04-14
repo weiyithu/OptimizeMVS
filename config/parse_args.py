@@ -1,7 +1,7 @@
 
 import argparse
 
-DATASET_PATH = '/data2/weiy/data-3d/shapenet/'
+DATASET_PATH = 'data'
 
 def parse_args():
     parser = argparse.ArgumentParser()
