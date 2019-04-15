@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 
 ### Acknowledgements
-Part of the external operators are borrowed from [latent_3d_points](https://github.com/optas/latent_3d_points) and [PointNet++](https://github.com/charlesq34/pointnet2). The multi-view images were rendered from [ShapeNetCore](https://www.shapenet.org/) with the preprocessing scripts in [mvcSnP](https://github.com/shubhtuls/mvcSnP) and the point cloud data was from [latent_3d_points](https://github.com/optas/latent_3d_points).
+Part of the external operators are borrowed from [latent_3d_points](https://github.com/optas/latent_3d_points) and [PointNet++](https://github.com/charlesq34/pointnet2). The multi-view images were rendered from [ShapeNetCore](https://www.shapenet.org/) with the preprocessing scripts in [mvcSnP](https://github.com/shubhtuls/mvcSnP) and the point cloud data was from [latent_3d_points](https://github.com/optas/latent_3d_points). We sincerely thank the authors for their kind help.
 
 This work was supported in part by the National Natural Science Foundation of China under Grant U1813218, Grant 61822603, Grant U1713214, Grant 61672306, and Grant 61572271.
 
