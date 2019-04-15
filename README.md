@@ -1,6 +1,6 @@
 ## OptimizeMVS
 
-Created by [Yi Wei](https://github.com/weiyithu), [Shaohui Liu](http://b1ueber2y.me/) and [Wang Zhao](https://github.com/thuzhaowang) from Tsinghua University.
+Created by [Yi Wei](https://github.com/weiyithu), [Shaohui Liu](http://github.com/B1ueber2y/) and [Wang Zhao](https://github.com/thuzhaowang) from Tsinghua University.
 
 ### Introduction
 This repository contains source code for [Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction](https://arxiv.org/abs/1612.01105) in tensorflow. 
@@ -27,6 +27,12 @@ pip install -r requirements.txt
 
 
 ### Usage
+
+
+### Acknowledgements
+Part of the external operators are borrowed from [latent_3d_points](https://github.com/optas/latent_3d_points) and [PointNet++](https://github.com/charlesq34/pointnet2). The multi-view images was rendered from [ShapeNetCore](https://www.shapenet.org/) with the preprocessing scripts in [mvcSnP](https://github.com/shubhtuls/mvcSnP) and the point cloud data was from [latent_3d_points](https://github.com/optas/latent_3d_points).
+
+This work was supported in part by the National Natural Science Foundation of China under Grant U1813218, Grant 61822603, Grant U1713214, Grant 61672306, and Grant 61572271.
 
 
 ### Citation
