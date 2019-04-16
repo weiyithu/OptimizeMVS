@@ -3,7 +3,7 @@
 Created by [Yi Wei](https://github.com/weiyithu), [Shaohui Liu](http://github.com/B1ueber2y/) and [Wang Zhao](https://github.com/thuzhaowang) from Tsinghua University.
 
 ### Introduction
-This repository contains source code for [Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction](https://arxiv.org/abs/1612.01105) in tensorflow. 
+This repository contains source code for [Conditional Single-view Shape Generation for Multi-view Stereo Reconstruction](http://b1ueber2y.me/projects/optimizeMVS/) in tensorflow. 
 
 ![prediction example](https://github.com/weiyithu/OptimizeMVS/blob/master/doc/teaser.png)
 
