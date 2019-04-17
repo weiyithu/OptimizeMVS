@@ -150,48 +150,48 @@ def build_test_graph(args):
     # ------ define graph ------
     with tf.device("/gpu:0"):
         ## ------ define input data ------
-        r = tf.placeholder(tf.float32, shape=[None, opt.rand_dim])
-        image_in = tf.placeholder(tf.float32, shape=[None, opt.in_H, opt.in_W, 3])
-        pcgt = tf.placeholder(tf.float32, shape=[None, opt.pcgtSize, 3])
-        depth = tf.placeholder(tf.float32, shape=[None, opt.depth_H, opt.depth_W, 1])
-        mask = tf.placeholder(tf.float32, shape=[None, opt.depth_H, opt.depth_W, 1])
+        r = tf.placeholder(tf.float32, shape=[None, args.rand_dim])
+        image_in = tf.placeholder(tf.float32, shape=[None, args.in_H, args.in_W, 3])
+        pcgt = tf.placeholder(tf.float32, shape=[None, args.pcgtSize, 3])
+        depth = tf.placeholder(tf.float32, shape=[None, args.depth_H, args.depth_W, 1])
+        mask = tf.placeholder(tf.float32, shape=[None, args.depth_H, args.depth_W, 1])
         K = tf.placeholder(tf.float32, shape=[None, 3, 3])
         extrinsic = tf.placeholder(tf.float32, shape=[None, 4, 4])
         PH = [image_in, pcgt, depth, mask, K, extrinsic, r]
     
         ## ------ build single-image encoder model ------
         tflearn.init_graph(seed=1029, num_cores=2, gpu_memory_fraction=0.9, soft_placement=True)
-        pc  = graph.encoder(opt, image_in, r)
+        pc  = graph.encoder(args, image_in, r)
     
         ## ------ evaluation metric -----
-        pcgt_s1 = tf.tile(pcgt,[opt.rand_num,1,1]) #[R*B*V,N,3]
-        pcgt_s2_test = tf.reshape(pcgt,[-1, opt.num_images, opt.pcgtSize, 3])[:,0,:,:] #[B,N,3]
+        pcgt_s1 = tf.tile(pcgt,[args.rand_num,1,1]) #[R*B*V,N,3]
+        pcgt_s2_test = tf.reshape(pcgt,[-1, args.num_images, args.pcgtSize, 3])[:,0,:,:] #[B,N,3]
         pc_s1 = pc #[R*B*V,N,3]
-        pc_s2 = tf.reshape(pc, [-1, opt.num_images*opt.pcgtSize, 3]) #train: [R*B,N*V,3], test: [B,N*V,3]
+        pc_s2 = tf.reshape(pc, [-1, args.num_images*args.pcgtSize, 3]) #train: [R*B,N*V,3], test: [B,N*V,3]
     
         emd_s1 = evaluation(gt=pcgt_s1, pred=pc_s1, is_emd=True)
         cd_s1, d1_s1, d2_s1 = evaluation(gt=pcgt_s1, pred=pc_s1, is_emd=False)
-        cd_fps_s2_evaluate, d1_fps_s2_evaluate, d2_fps_s2_evaluate = evaluation(gt=pcgt_s2_test, pred=farthest_point_sampling(opt.pcgtSize, pc_s2), is_emd=False)
+        cd_fps_s2_evaluate, d1_fps_s2_evaluate, d2_fps_s2_evaluate = evaluation(gt=pcgt_s2_test, pred=farthest_point_sampling(args.pcgtSize, pc_s2), is_emd=False)
         cd_s2_evaluate, d1_s2_evaluate, d2_s2_evaluate = evaluation(gt=pcgt_s2_test, pred=pc_s2, is_emd=False)
     
         ## ------ evaluation loss ------
-        K_tile = tf.tile(K, [opt.rand_num, 1, 1]) #[R*B*V,3,3]
-        extrinsic_tile = tf.tile(extrinsic, [opt.rand_num, 1, 1]) #[R*B*V,4,4]
-        depth_tile = tf.tile(tf.squeeze(depth, [3]), [opt.rand_num, 1, 1]) #[R*B*V,H,W]
-        loss_front_s1 = front_loss(pc, K_tile, extrinsic_tile, depth_tile, H=opt.depth_H/opt.scale, W=opt.depth_W/opt.scale, reuse=True)
-        pc_concat = tf.reshape(pc, [-1, opt.num_images*opt.pcgtSize,3])
-        pc_concat = tf.reshape(tf.tile(tf.expand_dims(pc_concat,axis=1), [1,opt.num_images, 1,1]),[-1, opt.num_images*opt.pcgtSize, 3])
-        loss_front_s2_evaluate = front_loss(pc_concat, K, extrinsic, tf.squeeze(depth, [3]), H=opt.depth_H/opt.scale, W=opt.depth_W/opt.scale, reuse=True, is_emd=False)
+        K_tile = tf.tile(K, [args.rand_num, 1, 1]) #[R*B*V,3,3]
+        extrinsic_tile = tf.tile(extrinsic, [args.rand_num, 1, 1]) #[R*B*V,4,4]
+        depth_tile = tf.tile(tf.squeeze(depth, [3]), [args.rand_num, 1, 1]) #[R*B*V,H,W]
+        loss_front_s1 = front_loss(pc, K_tile, extrinsic_tile, depth_tile, H=args.depth_H/args.scale, W=args.depth_W/args.scale, reuse=True)
+        pc_concat = tf.reshape(pc, [-1, args.num_images*args.pcgtSize,3])
+        pc_concat = tf.reshape(tf.tile(tf.expand_dims(pc_concat,axis=1), [1,args.num_images, 1,1]),[-1, args.num_images*args.pcgtSize, 3])
+        loss_front_s2_evaluate = front_loss(pc_concat, K, extrinsic, tf.squeeze(depth, [3]), H=args.depth_H/args.scale, W=args.depth_W/args.scale, reuse=True, is_emd=False)
     
         ## ------ inference loss ------
         extrinsic_consis = tf.tile(tf.expand_dims(tf.eye(4), axis=0), [tf.shape(pc)[0], 1, 1])
         
-        consis_loss_all_cd = consis_loss(tf.reshape(pc, [-1, opt.num_images, opt.pcgtSize, 3]), tf.reshape(extrinsic_consis, [-1, opt.num_images, 4, 4]), opt.num_images, is_emd=False)
+        consis_loss_all_cd = consis_loss(tf.reshape(pc, [-1, args.num_images, args.pcgtSize, 3]), tf.reshape(extrinsic_consis, [-1, args.num_images, 4, 4]), args.num_images, is_emd=False)
         consis_loss_cd = tf.reduce_mean(consis_loss_all_cd)
-        r_fgsm, loss_fgsm = FGSM(r, consis_loss_cd, opt.fgsm_lr) 
+        r_fgsm, loss_fgsm = FGSM(r, consis_loss_cd, args.fgsm_lr) 
     
     
-        ## ------ optimizer ------
+        ## ------ args.mizer ------
         lr_PH = tf.placeholder(tf.float32, shape=[])
 
         # test output
@@ -201,7 +201,6 @@ def build_test_graph(args):
         ret['loss_front_s1'] = loss_front_s1
         ret['cd_s1'] = cd_s1
         ret['emd_s1'] = emd_s1
-        ret['g_loss'] = g_loss
         ret['d1_s1'] = d1_s1
         ret['d2_s1'] = d2_s1
 

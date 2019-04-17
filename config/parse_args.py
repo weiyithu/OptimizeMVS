@@ -1,15 +1,15 @@
 
 import argparse
 
-DATASET_PATH = 'data'
+DATASET_PATH = '/data2/weiy/data-3d/shapenet/'
 
 def parse_args():
     parser = argparse.ArgumentParser()
    
     # ------ basic setting ------
     parser.add_argument("--gpu", type=int, required=True, help="gpu_id")
-    parser.add_argument('--task', type=str, required=True, help='task name, to be appeared at the title of the diary.')
-    parser.add_argument('--model', type=str, required=True, help='model name')
+    parser.add_argument('--task', type=str, help='task name, to be appeared at the title of the diary.')
+    parser.add_argument('--model', type=str, help='model name')
     parser.add_argument("--cat", type=int, default=1, help="number of categories (1 or 13)")
     parser.add_argument('--group', type=str, default="main", help='group name')
     parser.add_argument("--load", default=None,	help="load trained model to fine-tune/evaluate")

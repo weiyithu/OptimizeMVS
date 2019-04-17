@@ -1,4 +1,4 @@
-
+import os 
 import numpy as np
 import time, sys
 import threading
@@ -9,10 +9,9 @@ sys.path.append(this_dir)
 from build_graph import build_test_graph
 sys.path.append(os.path.join(this_dir, '..'))
 from config.base_cfg import init_config
-import lib.diary.saverhelper as helper
 from lib.loader.dataloader import Loader, perform_test
-import lib.utils.color_utils as color_utils
 from lib.utils.color_utils import *
+from lib.utils.io_utils import *
 
 print(toYellow("======================================================="))
 print(toYellow("test.py "))
@@ -46,11 +45,11 @@ with tf.Session(config=tfConfig) as sess:
         appendix = []
         metric_list = ['cd', 'emd']
     else:
-        runList_test = [tlist['loss_front_s2_evaluate'], tlist['cd_s2_evaluate'], tlist['cd_fps_s2_evaluate'], tlist['d1_s2_evaluate'], tlist['d2_s2_evaluate']]
-        appendix = [tlist['r_fgsm'], tlist['loss_fgsm,consis_loss_all_cd']]
+        runList_test = [tlist['loss_front_s2_evaluate'], tlist['cd_s2_evaluate'], tlist['cd_fps_s2_evaluate'], tlist['d1_fps_s2_evaluate'], tlist['d2_fps_s2_evaluate']]
+        appendix = [tlist['r_fgsm'], tlist['loss_fgsm'],tlist['consis_loss_all_cd']]
         metric_list = ['cd', 'cd_fps']
     if args.load:
-        utils.restoreModel(args.savedir, args, sess, tf.train.Saver())
+        restoreModel(args.savedir, args, sess, tf.train.Saver())
         print(toMagenta("loading pretrained ({0}) to evaluate...".format(args.load)))
         args.load = None
 
