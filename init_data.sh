@@ -15,26 +15,17 @@ wget https://image.moeclub.org/GoogleDrive/1yWz1k0RG-KW8DhjezM1JSOgapLMf91A2
 mv 1yWz1k0RG-KW8DhjezM1JSOgapLMf91A2 rendered-shapenet.tar.gz
 tar zxf rendered-shapenet.tar.gz
 rm rendered-shapenet.tar.gz 
+
 ## download data list
 wget https://image.moeclub.org/GoogleDrive/1-gRyvYD2RjfdpONGUBYj20gCsTIUJ82r
 mv 1-gRyvYD2RjfdpONGUBYj20gCsTIUJ82r data_list.tar.gz
 tar zxf data_list.tar.gz
 rm data_list.tar.gz
 
-# build evaluation metric
-cd ../lib/external_ops/evaluation_metric
-sh tf_approxmatch_compile.sh
-sh tf_nndistance_compile.sh
-
-# build farthest sampling
-cd ../farthest_sampling
-sh tf_sampling_compile.sh
-cd ../../..
-
 # download autoencoder model
+cd ..
 wget https://image.moeclub.org/GoogleDrive/1YvGhVYF-o9pA3u4fGAspF2UlpohV6zoy
 mv 1YvGhVYF-o9pA3u4fGAspF2UlpohV6zoy pretrain.tar.gz
 tar zxf pretrain.tar.gz
 rm pretrain.tar.gz
 
-mkdir demo
