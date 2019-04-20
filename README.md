@@ -28,17 +28,20 @@ pip install -r requirements.txt
 
 ### Usage
 
-#### 1. Initial setup. Include compile, mkdir and download data
+#### 1. Initial setup. 
+Include compile, mkdir and download data
 ```bash 
 sh init.sh
 ```
 
-#### 2. Two-stage training. See details options in ./config
+#### 2. Two-stage training. 
+See details options in ./config
 ```bash
 sh train.sh
 ```
 
-#### 3. Evaluation. You can download our pretrained model: [single-category](https://drive.google.com/open?id=1UlweAWvoMGTOyvSM2_vczLHtwsysEFGw)([wget address](https://image.moeclub.org/GoogleDrive/1UlweAWvoMGTOyvSM2_vczLHtwsysEFGw)), [multi-category](https://drive.google.com/open?id=1o8X_d9blVuerrD-dmi2n1NUaI7ZAButt)([wget address](https://image.moeclub.org/GoogleDrive/1o8X_d9blVuerrD-dmi2n1NUaI7ZAButt)). And move pretrained model to ./demo. To evaluate your own model, please reset 'load' option as your model address in test.sh.
+#### 3. Evaluation. 
+You can download our pretrained model: [single-category](https://drive.google.com/open?id=1UlweAWvoMGTOyvSM2_vczLHtwsysEFGw) ([wget address](https://image.moeclub.org/GoogleDrive/1UlweAWvoMGTOyvSM2_vczLHtwsysEFGw)), [multi-category](https://drive.google.com/open?id=1o8X_d9blVuerrD-dmi2n1NUaI7ZAButt) ([wget address](https://image.moeclub.org/GoogleDrive/1o8X_d9blVuerrD-dmi2n1NUaI7ZAButt)). And move pretrained model to ./demo. To evaluate your own model, please reset 'load' option as your model address in test.sh.
 ```bash
 sh test.sh
 ```

@@ -12,9 +12,9 @@ mv shape_net_core_uniform_samples_2048 pcdata_2048
 rm shape_net_core_uniform_samples_2048.zip
 ## download rendered multi-view images
 wget https://image.moeclub.org/GoogleDrive/1yWz1k0RG-KW8DhjezM1JSOgapLMf91A2
-mv 1yWz1k0RG-KW8DhjezM1JSOgapLMf91A2 rendering_uniform.tar.gz
-tar zxf rendering_uniform.tar.gz
-rm rendering_uniform.tar.gz 
+mv 1yWz1k0RG-KW8DhjezM1JSOgapLMf91A2 rendered-shapenet.tar.gz
+tar zxf rendered-shapenet.tar.gz
+rm rendered-shapenet.tar.gz 
 ## download data list
 wget https://image.moeclub.org/GoogleDrive/1-gRyvYD2RjfdpONGUBYj20gCsTIUJ82r
 mv 1-gRyvYD2RjfdpONGUBYj20gCsTIUJ82r data_list.tar.gz

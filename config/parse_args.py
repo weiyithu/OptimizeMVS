@@ -30,7 +30,7 @@ def parse_args():
     parser.add_argument('--dataset_path', default=DATASET_PATH, help='dataset path')
     parser.add_argument('--datalist_path', default='data_list', help='relative path of data list w.r.t dataset path')
     parser.add_argument('--pcgt_path', default='pcdata_2048', help='relative path of point cloud data w.r.t dataset path')
-    parser.add_argument('--rendering_path', default='rendering_uniform', help='relative path of rendered data w.r.t dataset path')
+    parser.add_argument('--rendering_path', default='rendered-shapenet', help='relative path of rendered data w.r.t dataset path')
 
     # ------ hyper-parameter (train) ------
     parser.add_argument("--alpha_s1", type=float, default=0.2,  help="diversity loss alpha for stage1")
