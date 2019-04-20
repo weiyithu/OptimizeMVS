@@ -1,7 +1,8 @@
 
 import argparse
-
-DATASET_PATH = '/data2/weiy/data-3d/shapenet/'
+import os
+this_dir = os.path.abspath(os.path.dirname(__file__))
+DATASET_PATH = os.path.join(this_dir, 'data')
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -49,7 +50,7 @@ def parse_args():
 
     # ------ hyper-parameter (test) ------
     parser.add_argument("--cd_per_class", type=bool, default=False, help="whether evaluate cd for every class (only for cat13)")
-    parser.add_argument("--fgsm_iter", type=int, default=10, help="the iterations of fgsm")
+    parser.add_argument("--fgsm_iter", type=int, default=30, help="the iterations of fgsm")
     parser.add_argument("--fgsm_lr",   type=float, default=1,  help="base learning rate ")
     parser.add_argument("--batchSize_test", type=int, default=2,  help="batch size for evaluation")
     parser.add_argument("--chunkSize_test", type=int, default=100,  help="data chunk size to load for evaluation")
